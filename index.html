@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <h3>
+            我当前的
+            <span>
+                0
+            </span>
+        </h3>
+        <button class="add">+1</button>
+        <button class="minus">-1</button>
+    </div>
+    <script src="node_modules/redux/dist/redux.js"></script>
+    <script>
+        //redux 中action的概念
+        //1.action 是一个动作 行为
+        //2.使用一个对象来表示一个action
+        //3.每个action有一个唯一的标识
+        const add = () => ({
+            type: 'ADD'
+        })
+        const minus = () => ({
+            type: 'MINUS'
+        })
+        //action creator
+        // const delTodo = (id) => ({
+        //     type: 'DEL_TODO',
+        //     id
+        // })
+        //reducer
+        //reducer是一个函数，用于提供处理action
+        // reducer必须是一个纯函数 pure  （有古定输入和输出的值类似）
+        // reducer 内部的statue需要个默认值，这个初始值是redux的初始值
+        // reducer 需要判断action的type,根据type进行处理。处理的时候不能改变原数据
+        //reducer 如果遇到不认识的type.一定要返回原来的state
+        function reducer(state = 0, action) {
+            switch (action.type) {
+                case 'ADD':
+                    return state + 1
+                case "MINUS":
+                    return state - 1
+                default:
+                    return state
+            }
+
+        }
+
+        //store 
+        const { createStore } = window.Redux
+        //参数1:reducer
+        const store = createStore(reducer)
+
+
+
+
+        //订阅 只要state发生变化。这个订阅的回调函数就会执行
+        store.subscribe(() => {
+            console.log(store.getState())
+            document.querySelector('span').innerHTML = store.getState()
+        })
+
+        document.querySelector('.add').onclick = function () {
+            store.dispatch(add())
+        }
+
+        document.querySelector('.minus').onclick = function () {
+            store.dispatch(minus())
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>
